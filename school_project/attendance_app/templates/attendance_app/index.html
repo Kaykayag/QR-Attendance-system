@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
@@ -451,14 +452,33 @@
                     <button onclick="showPage('landing')" class="text-xs text-red-400 font-bold uppercase">Log Out</button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 class="text-gray-500 text-sm font-medium uppercase">Present</h3>
-                        <p id="present-count" class="text-4xl font-bold text-blue-400 mt-2">0</p>
+                        <p id="present-count" class="text-4xl font-bold text-green-500 mt-2">0</p>
                     </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-gray-500 text-sm font-medium uppercase">Total Students</h3>
+                        <p id="total-students" class="text-4xl font-bold text-blue-400 mt-2">0</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-gray-500 text-sm font-medium uppercase">Attendance Rate</h3>
+                        <p id="attendance-rate" class="text-4xl font-bold text-purple-500 mt-2">0%</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div onclick="toggleScanner()" class="bg-blue-300 p-6 rounded-2xl shadow-lg cursor-pointer hover:bg-blue-400 text-gray-800 flex items-center justify-between">
-                        <div><h3 class="font-bold text-lg">Scan QR</h3><p class="text-indigo-200 text-sm">Open camera</p></div>
+                        <div><h3 class="font-bold text-lg">Camera Scan</h3><p class="text-indigo-200 text-sm">Use camera</p></div>
                         <i data-lucide="camera" class="w-8 h-8"></i>
+                    </div>
+                    <div onclick="openImageUpload()" class="bg-green-300 p-6 rounded-2xl shadow-lg cursor-pointer hover:bg-green-400 text-gray-800 flex items-center justify-between">
+                        <div><h3 class="font-bold text-lg">Upload Image</h3><p class="text-indigo-200 text-sm">QR from gallery</p></div>
+                        <i data-lucide="upload" class="w-8 h-8"></i>
+                    </div>
+                    <div onclick="showStudentsManagement()" class="bg-purple-300 p-6 rounded-2xl shadow-lg cursor-pointer hover:bg-purple-400 text-gray-800 flex items-center justify-between">
+                        <div><h3 class="font-bold text-lg">Manage Students</h3><p class="text-indigo-200 text-sm">View/Edit/Delete</p></div>
+                        <i data-lucide="users" class="w-8 h-8"></i>
                     </div>
                 </div>
 
@@ -468,7 +488,7 @@
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="p-6 border-b border-gray-50"><h2 class="font-bold text-gray-800">Log</h2></div>
+                    <div class="p-6 border-b border-gray-50"><h2 class="font-bold text-gray-800">Attendance Log</h2></div>
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 text-gray-500 text-xs uppercase"><tr><th class="px-6 py-4">Time</th><th class="px-6 py-4">Name</th><th class="px-6 py-4">Status</th></tr></thead>
                         <tbody id="attendance-list" class="divide-y divide-gray-100"><tr id="empty-state"><td colspan="3" class="px-6 py-12 text-center text-gray-400">No scans yet.</td></tr></tbody>
@@ -476,6 +496,47 @@
                 </div>
             </div>
         </section>
+
+        <!-- PAGE: STUDENTS MANAGEMENT -->
+        <section id="page-students" class="hidden fade-in">
+            <div class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-3xl font-bold text-gray-800">Student Management</h1>
+                    <button onclick="showPage('teacher')" class="text-gray-500 hover:text-blue-400 flex items-center">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Back to Dashboard
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="p-6 border-b border-gray-50 flex justify-between items-center">
+                        <h2 class="font-bold text-gray-800">Students List</h2>
+                        <div class="flex items-center space-x-4">
+                            <input type="text" id="student-search" placeholder="Search students..." class="px-4 py-2 border rounded-lg text-sm">
+                            <button onclick="refreshStudentsList()" class="bg-blue-300 hover:bg-blue-400 text-gray-800 px-4 py-2 rounded-lg text-sm font-bold">
+                                <i data-lucide="refresh-cw" class="w-4 h-4 mr-1"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                            <tr>
+                                <th class="px-6 py-4">Student ID</th>
+                                <th class="px-6 py-4">Name</th>
+                                <th class="px-6 py-4">Course - Level</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body" class="divide-y divide-gray-100">
+                            <tr id="students-loading"><td colspan="5" class="px-6 py-12 text-center text-gray-400">Loading students...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hidden file input for QR image upload -->
+        <input type="file" id="qr-image-input" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
 
     </main>
 
@@ -523,22 +584,38 @@
                 level: document.getElementById('s-level').value,
             };
 
-            // Call Django API
-            const response = await fetch('/api/login/student/', {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-            const data = await response.json();
+            try {
+                const response = await fetch('/api/login/student/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
 
-            if(data.status === 'success') {
-                // Render Dashboard
-                document.getElementById('card-name').innerText = payload.firstname + ' ' + payload.lastname;
-                document.getElementById('card-course-level').innerText = `${payload.course} • Year ${payload.level}`;
-                document.getElementById('card-id').innerText = payload.id;
-                document.getElementById('card-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${payload.id}`;
-                showPage('student');
-            } else {
-                alert('Login Failed');
+                if(data.status === 'success') {
+                    // Render Dashboard
+                    document.getElementById('card-name').innerText = payload.firstname + ' ' + payload.lastname;
+                    document.getElementById('card-course-level').innerText = `${payload.course} • Year ${payload.level}`;
+                    document.getElementById('card-id').innerText = payload.id;
+                    
+                    // Generate QR code with proper format
+                    const qrData = `STUDENT:${payload.id}`;
+                    document.getElementById('card-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}`;
+                    
+                    showPage('student');
+                    
+                    // Show success message
+                    setTimeout(() => {
+                        alert(`✅ ${data.message}`);
+                    }, 500);
+                } else {
+                    alert(`❌ ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Network error. Please try again.');
             }
         }
 
@@ -551,48 +628,85 @@
                 subject: document.getElementById('t-subject').value,
             };
 
-            const response = await fetch('/api/login/teacher/', {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-            const data = await response.json();
+            try {
+                const response = await fetch('/api/login/teacher/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
 
-            if(data.status === 'success') {
-                document.getElementById('teacher-name').innerText = payload.firstname + ' ' + payload.lastname;
-                document.getElementById('teacher-subject').innerText = payload.subject;
-                showPage('teacher');
+                if(data.status === 'success') {
+                    currentTeacher = data.teacher;
+                    document.getElementById('teacher-name').innerText = payload.firstname + ' ' + payload.lastname;
+                    document.getElementById('teacher-subject').innerText = payload.subject;
+                    
+                    // Load initial data
+                    await loadDashboardStats();
+                    showPage('teacher');
+                    
+                    setTimeout(() => {
+                        alert(`✅ ${data.message}`);
+                    }, 500);
+                } else {
+                    alert(`❌ ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Network error. Please try again.');
             }
         }
 
-        async function sendScanToBackend(id) {
-            const response = await fetch('/api/attendance/mark/', {
-                method: 'POST',
-                body: JSON.stringify({ student_id: id })
-            });
-            const data = await response.json();
+        async function sendScanToBackend(qrData) {
+            try {
+                const response = await fetch('/api/attendance/mark/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        qr_data: qrData,
+                        teacher_id: currentTeacher ? currentTeacher.id : ''
+                    })
+                });
+                const data = await response.json();
 
-            if (data.status === 'success') {
-                const s = data.student;
-                const tbody = document.getElementById('attendance-list');
-                const empty = document.getElementById('empty-state');
-                if(empty) empty.remove();
-                
-                const time = new Date().toLocaleTimeString();
-                const row = `
-                    <tr class="hover:bg-green-50 transition bg-green-50">
-                        <td class="px-6 py-4 text-gray-500 font-mono text-sm">${time}</td>
-                        <td class="px-6 py-4 font-medium text-gray-900">
-                            ${s.name} <div class="text-xs text-gray-400">${s.course_level}</div>
-                        </td>
-                        <td class="px-6 py-4"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Present</span></td>
-                    </tr>`;
-                tbody.innerHTML = row + tbody.innerHTML;
-                
-                presentCount++;
-                document.getElementById('present-count').innerText = presentCount;
-                alert(`✅ ${s.name} marked present!`);
-            } else {
-                alert(`❌ ${data.message}`);
+                if (data.status === 'success' || data.status === 'warning') {
+                    const s = data.student;
+                    const tbody = document.getElementById('attendance-list');
+                    const empty = document.getElementById('empty-state');
+                    if(empty) empty.remove();
+                    
+                    const time = s.time_marked || new Date().toLocaleTimeString();
+                    const statusClass = data.status === 'warning' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
+                    const statusText = data.status === 'warning' ? 'Already Present' : 'Present';
+                    
+                    const row = `
+                        <tr class="hover:bg-green-50 transition ${statusClass}">
+                            <td class="px-6 py-4 text-gray-500 font-mono text-sm">${time}</td>
+                            <td class="px-6 py-4 font-medium text-gray-900">
+                                ${s.name} <div class="text-xs text-gray-400">${s.course_level}</div>
+                            </td>
+                            <td class="px-6 py-4"><span class="${statusClass} px-2 py-1 rounded-full text-xs">${statusText}</span></td>
+                        </tr>`;
+                    tbody.innerHTML = row + tbody.innerHTML;
+                    
+                    // Update stats
+                    if (data.status === 'success') {
+                        presentCount++;
+                        document.getElementById('present-count').innerText = presentCount;
+                        await updateAttendanceRate();
+                    }
+                    
+                    alert(data.message);
+                } else {
+                    alert(`❌ ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Network error. Please try again.');
             }
         }
 
@@ -620,8 +734,370 @@
 
         function onScanSuccess(decodedText) {
             toggleScanner();
+            console.log('QR Code scanned:', decodedText);
             sendScanToBackend(decodedText);
         }
+
+        // ============ STUDENT MANAGEMENT FUNCTIONS ============
+        async function showStudentsManagement() {
+            showPage('students');
+            await loadStudentsList();
+        }
+
+        async function loadStudentsList() {
+            try {
+                const tbody = document.getElementById('students-table-body');
+                tbody.innerHTML = '<tr id="students-loading"><td colspan="5" class="px-6 py-12 text-center text-gray-400">Loading students...</td></tr>';
+                
+                const response = await fetch('/api/students/');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    currentStudents = data.students;
+                    renderStudentsTable(data.students);
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-red-400">Error loading students</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const tbody = document.getElementById('students-table-body');
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-red-400">Network error</td></tr>';
+            }
+        }
+
+        function renderStudentsTable(students) {
+            const tbody = document.getElementById('students-table-body');
+            
+            if (students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-gray-400">No students found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = students.map(student => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 font-mono text-sm">${student.id}</td>
+                    <td class="px-6 py-4 font-medium">${student.name}</td>
+                    <td class="px-6 py-4 text-gray-600">${student.course} - Year ${student.level}</td>
+                    <td class="px-6 py-4">
+                        <span class="${student.is_present_today ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'} px-2 py-1 rounded-full text-xs">
+                            ${student.is_present_today ? 'Present Today' : 'Absent'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            <button onclick="editStudent('${student.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="downloadStudentQR('${student.id}')" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        function refreshStudentsList() {
+            loadStudentsList();
+        }
+
+        function searchStudents() {
+            const searchTerm = document.getElementById('student-search').value.toLowerCase();
+            const filteredStudents = currentStudents.filter(student => 
+                student.name.toLowerCase().includes(searchTerm) ||
+                student.id.toLowerCase().includes(searchTerm) ||
+                student.course.toLowerCase().includes(searchTerm)
+            );
+            renderStudentsTable(filteredStudents);
+        }
+
+        function editStudent(studentId) {
+            const student = currentStudents.find(s => s.id === studentId);
+            if (!student) return;
+            
+            // Simple prompt-based editing (in a real app, you'd use a modal)
+            const newName = prompt('Enter new name (First Last):', student.name);
+            if (!newName) return;
+            
+            const [firstName, ...lastNameParts] = newName.split(' ');
+            const lastName = lastNameParts.join(' ');
+            
+            const newCourse = prompt('Enter new course:', student.course);
+            if (!newCourse) return;
+            
+            const newLevel = prompt('Enter new level (1-5):', student.level);
+            if (!newLevel) return;
+            
+            updateStudent(studentId, {
+                firstname: firstName,
+                lastname: lastName,
+                course: newCourse,
+                level: newLevel
+            });
+        }
+
+        async function updateStudent(studentId, data) {
+            try {
+                const response = await fetch('/api/students/update/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        student_id: studentId,
+                        ...data
+                    })
+                });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    alert('✅ Student updated successfully!');
+                    await loadStudentsList();
+                } else {
+                    alert(`❌ ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Network error. Please try again.');
+            }
+        }
+
+        async function deleteStudent(studentId) {
+            if (!confirm('Are you sure you want to deactivate this student?')) return;
+            
+            try {
+                const response = await fetch('/api/students/delete/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        student_id: studentId
+                    })
+                });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    alert('✅ Student deactivated successfully!');
+                    await loadStudentsList();
+                } else {
+                    alert(`❌ ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Network error. Please try again.');
+            }
+        }
+
+        function downloadStudentQR(studentId) {
+            const student = currentStudents.find(s => s.id === studentId);
+            if (!student) return;
+            
+            const qrData = `STUDENT:${studentId}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
+            
+            // Create a temporary link to download the QR code
+            const link = document.createElement('a');
+            link.href = qrUrl;
+            link.download = `${student.name.replace(' ', '_')}_QR.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // ============ DASHBOARD STATS ============
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch('/api/attendance/daily/');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    const stats = data.statistics;
+                    presentCount = stats.present;
+                    document.getElementById('present-count').innerText = stats.present;
+                    document.getElementById('total-students').innerText = stats.total_students;
+                    document.getElementById('attendance-rate').innerText = `${stats.attendance_rate}%`;
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        async function updateAttendanceRate() {
+            await loadDashboardStats();
+        }
+
+        // ============ QR SCANNING FUNCTIONS ============
+        function openImageUpload() {
+            document.getElementById('qr-image-input').click();
+        }
+
+        async function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('❌ Please select a valid image file.');
+                event.target.value = '';
+                return;
+            }
+            
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ Image file is too large. Please select an image smaller than 5MB.');
+                event.target.value = '';
+                return;
+            }
+            
+            alert('📱 QR Image uploaded! Decoding...');
+            
+            try {
+                // Create an image element to load the file
+                const img = new Image();
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                img.onload = function() {
+                    try {
+                        // Set canvas size to image size
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        
+                        // Draw image on canvas
+                        ctx.drawImage(img, 0, 0);
+                        
+                        // Get image data
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        
+                        // Decode QR code with better options
+                        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                            inversionAttempts: "dontInvert", // Optional: performance optimization
+                        });
+                        
+                        if (code) {
+                            // QR code found!
+                            console.log('QR Code decoded from image:', code.data);
+                            
+                            // Send the decoded QR data to the upload API
+                            sendDecodedQrToBackend(code.data);
+                        } else {
+                            // No QR code found, show error with suggestions
+                            alert('❌ No QR code found in the image. Please ensure:\n' +
+                                  '• The image is clear and well-lit\n' +
+                                  '• The QR code is not blurry or distorted\n' +
+                                  '• The QR code is fully visible in the image\n' +
+                                  '• Try a different QR code if available');
+                        }
+                    } catch (decodeError) {
+                        console.error('Error decoding QR code:', decodeError);
+                        alert('❌ Error processing QR code. Please try a different image.');
+                    }
+                };
+                
+                img.onerror = function() {
+                    alert('❌ Error loading image. Please try a different image.');
+                };
+                
+                // Load the image file
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.onerror = function() {
+                    alert('❌ Error reading file. Please try again.');
+                };
+                reader.readAsDataURL(file);
+                
+            } catch (error) {
+                console.error('Error processing image:', error);
+                alert('❌ Error processing image. Please try again.');
+            }
+            
+            // Clear the input
+            event.target.value = '';
+        }
+        
+        function sendDecodedQrToBackend(qrData) {
+            console.log('[DEBUG] sendDecodedQrToBackend called with qrData:', qrData);
+            console.log('[DEBUG] currentTeacher:', currentTeacher);
+            
+            const payload = { 
+                qr_data: qrData,
+                teacher_id: currentTeacher ? currentTeacher.id : ''
+            };
+            
+            console.log('[DEBUG] Sending payload:', payload);
+            
+            try {
+                fetch('/api/attendance/upload/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    console.log('[DEBUG] Response status:', response.status);
+                    console.log('[DEBUG] Response headers:', response.headers);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('[DEBUG] Response data:', data);
+                    
+                    if (data.status === 'success' || data.status === 'warning') {
+                        const s = data.student;
+                        const tbody = document.getElementById('attendance-list');
+                        const empty = document.getElementById('empty-state');
+                        if(empty) empty.remove();
+                        
+                        const time = s.time_marked || new Date().toLocaleTimeString();
+                        const statusClass = data.status === 'warning' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
+                        const statusText = data.status === 'warning' ? 'Already Present' : 'Present';
+                        
+                        const row = `
+                            <tr class="hover:bg-green-50 transition ${statusClass}">
+                                <td class="px-6 py-4 text-gray-500 font-mono text-sm">${time}</td>
+                                <td class="px-6 py-4 font-medium text-gray-900">
+                                    ${s.name} <div class="text-xs text-gray-400">${s.course_level}</div>
+                                </td>
+                                <td class="px-6 py-4"><span class="${statusClass} px-2 py-1 rounded-full text-xs">${statusText}</span></td>
+                            </tr>`;
+                        tbody.innerHTML = row + tbody.innerHTML;
+                        
+                        // Update stats
+                        if (data.status === 'success') {
+                            presentCount++;
+                            document.getElementById('present-count').innerText = presentCount;
+                            updateAttendanceRate();
+                        }
+                        
+                        alert(data.message);
+                    } else {
+                        alert(`❌ ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('[ERROR] Fetch error:', error);
+                    alert('❌ Network error. Please try again.');
+                });
+            } catch (error) {
+                console.error('[ERROR] General error:', error);
+                alert('❌ Network error. Please try again.');
+            }
+        }
+
+        // Update the initialization to include search functionality
+        window.addEventListener('load', () => {
+            initDarkMode();
+            document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
+            document.getElementById('student-search').addEventListener('input', searchStudents);
+        });
     </script>
 </body>
 </html>
