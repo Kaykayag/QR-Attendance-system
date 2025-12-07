@@ -278,6 +278,50 @@
         html.dark-mode .bg-gradient-to-r.from-blue-200.to-blue-300 p {
             color: #ffffff !important;
         }
+
+        /* Mobile and Android WebView optimizations */
+        .overflow-x-auto {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #d1d5db transparent;
+        }
+
+        /* Webkit scrollbar styling for better visibility */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background-color: #d1d5db;
+            border-radius: 2px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+            background-color: #9ca3af;
+        }
+
+        /* Table cell improvements for mobile */
+        .overflow-x-auto table td,
+        .overflow-x-auto table th {
+            min-width: 120px;
+        }
+
+        /* Touch-friendly scrolling on mobile */
+        @media (max-width: 768px) {
+            .overflow-x-auto {
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+            }
+            
+            .overflow-x-auto table td,
+            .overflow-x-auto table th {
+                scroll-snap-align: start;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
@@ -517,20 +561,22 @@
                             </button>
                         </div>
                     </div>
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
-                            <tr>
-                                <th class="px-6 py-4">Student ID</th>
-                                <th class="px-6 py-4">Name</th>
-                                <th class="px-6 py-4">Course - Level</th>
-                                <th class="px-6 py-4">Status</th>
-                                <th class="px-6 py-4">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="students-table-body" class="divide-y divide-gray-100">
-                            <tr id="students-loading"><td colspan="5" class="px-6 py-12 text-center text-gray-400">Loading students...</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left min-w-[600px]">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-4 whitespace-nowrap">Student ID</th>
+                                    <th class="px-6 py-4 whitespace-nowrap">Name</th>
+                                    <th class="px-6 py-4 whitespace-nowrap">Course - Level</th>
+                                    <th class="px-6 py-4 whitespace-nowrap">Status</th>
+                                    <th class="px-6 py-4 whitespace-nowrap">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-table-body" class="divide-y divide-gray-100">
+                                <tr id="students-loading"><td colspan="5" class="px-6 py-12 text-center text-gray-400">Loading students...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>

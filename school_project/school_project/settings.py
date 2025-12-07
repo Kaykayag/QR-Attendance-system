@@ -23,7 +23,7 @@ DEBUG = True
 # ALLOWS ALL HOSTS FOR TESTING PURPOSES RANI SIYA
 ALLOWED_HOSTS = ['*']
 #ERICA'S NGOK URL, DOWNLOAD SA UG NGOK TAS I PASTE IMOHANG URL HERE
-CSRF_TRUSTED_ORIGINS = ['https://repeatedly-omnipresent-aaden.ngrok-free.dev']
+CSRF_TRUSTED_ORIGINS = ['https://wenona-asepalous-pam.ngrok-free.dev']
 
 
 INSTALLED_APPS = [
