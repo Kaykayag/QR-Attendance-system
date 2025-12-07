@@ -10,7 +10,10 @@ import datetime
 import re
 
 def index(request):
-    return render(request, 'attendance_app/index.html')
+    # Add cache-busting timestamp to force reload
+    import time
+    timestamp = int(time.time())
+    return render(request, 'attendance_app/index.html', {'cache_bust': timestamp})
 
 # ============ STUDENT API ENDPOINTS ============
 
@@ -386,16 +389,9 @@ def upload_qr_image_api(request):
     """Upload and process QR image for attendance - This is now handled client-side by jsQR"""
     if request.method == 'POST':
         try:
-            # Debug logging
-            print(f"[DEBUG] upload_qr_image_api called with method: {request.method}")
-            print(f"[DEBUG] Content-Type: {request.META.get('CONTENT_TYPE', 'Not set')}")
-            print(f"[DEBUG] Request body: {request.body}")
-            
             data = json.loads(request.body)
             qr_data = data.get('qr_data', '')
             teacher_id = data.get('teacher_id', '')
-            
-            print(f"[DEBUG] Parsed data - qr_data: {qr_data}, teacher_id: {teacher_id}")
             
             if not qr_data:
                 return JsonResponse({'status': 'error', 'message': 'No QR data provided. Please ensure the image contains a valid QR code.'}, status=400)
@@ -410,11 +406,8 @@ def upload_qr_image_api(request):
             return mark_attendance_api(mock_request)
             
         except json.JSONDecodeError as e:
-            print(f"[ERROR] JSON Decode Error: {str(e)}")
-            print(f"[ERROR] Raw body content: {request.body}")
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON data'}, status=400)
         except Exception as e:
-            print(f"[ERROR] General Error: {str(e)}")
             return JsonResponse({'status': 'error', 'message': f'Error processing QR image: {str(e)}'}, status=500)
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)

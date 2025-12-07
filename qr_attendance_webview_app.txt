@@ -2,17 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartAttend System</title>
-    <!-- Cache busting -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -158,8 +149,7 @@
             background-color: var(--blue-dark);
             color: #f3f4f6;
         }
-        
-      
+       
         
         .bg-blue-100 {
             background-color: var(--blue-light);
@@ -287,124 +277,6 @@
         html.dark-mode .bg-gradient-to-r.from-blue-200.to-blue-300 p {
             color: #ffffff !important;
         }
-        
-        /* WebView-specific optimizations */
-        * {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        
-        input, textarea {
-            -webkit-user-select: auto;
-            -moz-user-select: auto;
-            -ms-user-select: auto;
-            user-select: auto;
-        }
-        
-        /* Prevent zoom on input focus in WebView */
-        input[type="text"], 
-        input[type="number"], 
-        input[type="email"], 
-        select, 
-        textarea {
-            font-size: 16px !important;
-        }
-        
-        /* WebView safe area handling */
-        @supports (padding: max(0px)) {
-            .safe-area-inset-top {
-                padding-top: max(1rem, env(safe-area-inset-top));
-            }
-            
-            .safe-area-inset-bottom {
-                padding-bottom: max(1rem, env(safe-area-inset-bottom));
-            }
-        }
-        
-        /* Better touch targets for mobile */
-        .touch-target {
-            min-height: 44px;
-            min-width: 44px;
-        }
-        
-        /* Smooth scrolling for WebView */
-        html {
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        /* Fix horizontal scrolling for tables on mobile */
-        table {
-            table-layout: fixed;
-            word-wrap: break-word;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        
-        th, td {
-            padding: 0.75rem 0.5rem;
-            min-width: 100px;
-        }
-        
-        /* Ensure buttons are touch-friendly */
-        button, .role-card, .bg-blue-300, .bg-purple-600, .bg-green-300 {
-            min-height: 44px;
-            cursor: pointer;
-            touch-action: manipulation;
-        }
-        
-        /* Fix touch events for mobile */
-        button:active, .role-card:active {
-            transform: scale(0.98);
-        }
-        
-        /* Better table overflow handling */
-        .overflow-x-auto {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            width: 100%;
-        }
-        
-        /* Fix table cell layout for mobile */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: auto;
-        }
-        
-        th, td {
-            padding: 12px 8px !important;
-            min-width: 120px !important;
-            max-width: 200px !important;
-            word-wrap: break-word !important;
-            white-space: normal !important;
-            vertical-align: top !important;
-            line-height: 1.4 !important;
-        }
-        
-        /* Specific fixes for student management table */
-        #students-table-body td {
-            padding: 12px 8px !important;
-            min-width: 120px !important;
-            font-size: 14px !important;
-            line-height: 1.4 !important;
-        }
-        
-        /* Fix action buttons container */
-        .flex.space-x-2 {
-            min-width: 100px !important;
-            display: flex !important;
-            gap: 8px !important;
-        }
-        
-        /* Fix text selection issues */
-        * {
-            -webkit-tap-highlight-color: transparent;
-        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
@@ -479,7 +351,7 @@
                                 <option value="Criminal Justice">Criminal Justice</option>  
                                 <option value="Hospitality Management">Hospitality Management</option>
                                 <option value="Tourism Management">Tourism Management</option>   
-                                <optiomn value="Marketing">Marketing</option>
+                                <option value="Marketing">Marketing</option>
                                 <option value="Entrepreneurship">Entrepreneurship</option>                      
                                 <option value="Nursing">Nursing</option>
                                 <option value="Medical Technology">Medical Technology</option>
@@ -494,7 +366,6 @@
                                 <option value="Interior Design">Interior Design</option>
                                 <option value="Accountancy">Accountancy</option>
                                 <option value="Financial Management">Financial Management</option>
-
                             </select>
                             <select id="s-level" class="w-full px-4 py-2 border rounded-lg" required>
                                 <option value="" disabled selected>Choose Level</option>
@@ -594,8 +465,8 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div onclick="handleCameraButtonClick()" class="bg-blue-300 p-6 rounded-2xl shadow-lg cursor-pointer hover:bg-blue-400 text-gray-800 flex items-center justify-between">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div onclick="toggleScanner()" class="bg-blue-300 p-6 rounded-2xl shadow-lg cursor-pointer hover:bg-blue-400 text-gray-800 flex items-center justify-between">
                         <div><h3 class="font-bold text-lg">Camera Scan</h3><p class="text-indigo-200 text-sm">Use camera</p></div>
                         <i data-lucide="camera" class="w-8 h-8"></i>
                     </div>
@@ -603,9 +474,6 @@
                         <div><h3 class="font-bold text-lg">Upload Image</h3><p class="text-indigo-200 text-sm">QR from gallery</p></div>
                         <i data-lucide="upload" class="w-8 h-8"></i>
                     </div>
-                </div>
-                
-                <div class="grid grid-cols-1 gap-4">
                     <div onclick="showStudentsManagement()" class="bg-purple-300 p-6 rounded-2xl shadow-lg cursor-pointer hover:bg-purple-400 text-gray-800 flex items-center justify-between">
                         <div><h3 class="font-bold text-lg">Manage Students</h3><p class="text-indigo-200 text-sm">View/Edit/Delete</p></div>
                         <i data-lucide="users" class="w-8 h-8"></i>
@@ -671,13 +539,86 @@
     </main>
 
     <script>
-        // Global variables for WebView compatibility
+        // Global variables
+        let html5QrcodeScanner = null;
+        let presentCount = 0;
         let currentTeacher = null;
         let currentStudents = [];
-        
-        // Dark mode setup
+        let currentStudent = null;
+
+        // LocalStorage keys
+        const STORAGE_KEYS = {
+            STUDENTS: 'qr_attendance_students',
+            TEACHERS: 'qr_attendance_teachers',
+            ATTENDANCE: 'qr_attendance_logs',
+            DARK_MODE: 'qr_attendance_dark_mode'
+        };
+
+        // ============ LOCAL STORAGE UTILITIES ============
+        function getFromStorage(key, defaultValue = []) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : defaultValue;
+            } catch (e) {
+                console.error('Error reading from storage:', e);
+                return defaultValue;
+            }
+        }
+
+        function saveToStorage(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (e) {
+                console.error('Error saving to storage:', e);
+            }
+        }
+
+        // ============ DATA MANAGEMENT ============
+        function initializeData() {
+            // Initialize with sample data if not exists
+            if (getFromStorage(STORAGE_KEYS.STUDENTS).length === 0) {
+                const sampleStudents = [
+                    {
+                        id: '12345',
+                        firstName: 'John',
+                        lastName: 'Doe',
+                        course: 'Computer Science',
+                        level: '3',
+                        isActive: true
+                    },
+                    {
+                        id: '67890',
+                        firstName: 'Jane',
+                        lastName: 'Smith',
+                        course: 'Information Technology',
+                        level: '2',
+                        isActive: true
+                    }
+                ];
+                saveToStorage(STORAGE_KEYS.STUDENTS, sampleStudents);
+            }
+
+            if (getFromStorage(STORAGE_KEYS.TEACHERS).length === 0) {
+                const sampleTeachers = [
+                    {
+                        id: 'T001',
+                        firstName: 'Prof',
+                        lastName: 'Johnson',
+                        subject: 'Computer Science',
+                        isActive: true
+                    }
+                ];
+                saveToStorage(STORAGE_KEYS.TEACHERS, sampleTeachers);
+            }
+
+            if (getFromStorage(STORAGE_KEYS.ATTENDANCE).length === 0) {
+                saveToStorage(STORAGE_KEYS.ATTENDANCE, []);
+            }
+        }
+
+        // ============ DARK MODE ============
         function initDarkMode() {
-            const savedMode = localStorage.getItem('darkMode');
+            const savedMode = localStorage.getItem(STORAGE_KEYS.DARK_MODE);
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             const isDark = savedMode ? savedMode === 'true' : prefersDark;
             
@@ -693,451 +634,120 @@
         
         function toggleDarkMode() {
             const isDark = document.documentElement.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', isDark);
+            localStorage.setItem(STORAGE_KEYS.DARK_MODE, isDark);
             const icon = document.getElementById('theme-icon');
             icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
             lucide.createIcons();
         }
-        
-        window.addEventListener('load', () => {
-            initDarkMode();
-            document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
-        });
-        let html5QrcodeScanner = null;
-        let presentCount = 0;
 
-
-        async function handleStudentLogin(e) {
+        // ============ STUDENT LOGIN ============
+        function handleStudentLogin(e) {
             e.preventDefault();
-            const payload = {
-                firstname: document.getElementById('s-firstname').value,
-                lastname: document.getElementById('s-lastname').value,
-                id: document.getElementById('s-id').value,
-                course: document.getElementById('s-course').value,
-                level: document.getElementById('s-level').value,
+            const firstName = document.getElementById('s-firstname').value;
+            const lastName = document.getElementById('s-lastname').value;
+            const id = document.getElementById('s-id').value;
+            const course = document.getElementById('s-course').value;
+            const level = document.getElementById('s-level').value;
+
+            // Save or update student
+            const students = getFromStorage(STORAGE_KEYS.STUDENTS);
+            const existingIndex = students.findIndex(s => s.id === id);
+            
+            const studentData = {
+                id: id,
+                firstName: firstName,
+                lastName: lastName,
+                course: course,
+                level: level,
+                isActive: true
             };
 
-            try {
-                const response = await fetch('/api/login/student/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
-                const data = await response.json();
-
-                if(data.status === 'success') {
-                    // Render Dashboard
-                    document.getElementById('card-name').innerText = payload.firstname + ' ' + payload.lastname;
-                    document.getElementById('card-course-level').innerText = `${payload.course} • Year ${payload.level}`;
-                    document.getElementById('card-id').innerText = payload.id;
-                    
-                    // Generate QR code with proper format
-                    const qrData = `STUDENT:${payload.id}`;
-                    document.getElementById('card-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}`;
-                    
-                    showPage('student');
-                    
-                    // Show success message
-                    setTimeout(() => {
-                        alert(`✅ ${data.message}`);
-                    }, 500);
-                } else {
-                    alert(`❌ ${data.message}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('❌ Network error. Please try again.');
+            if (existingIndex >= 0) {
+                students[existingIndex] = studentData;
+            } else {
+                students.push(studentData);
             }
+            
+            saveToStorage(STORAGE_KEYS.STUDENTS, students);
+            currentStudent = studentData;
+
+            // Render Dashboard
+            document.getElementById('card-name').innerText = firstName + ' ' + lastName;
+            document.getElementById('card-course-level').innerText = `${course} • Year ${level}`;
+            document.getElementById('card-id').innerText = id;
+            
+            // Generate QR code
+            const qrData = `STUDENT:${id}`;
+            document.getElementById('card-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}`;
+            
+            showPage('student');
+            alert('✅ Student registered successfully!');
         }
 
-        async function handleTeacherLogin(e) {
+        // ============ TEACHER LOGIN ============
+        function handleTeacherLogin(e) {
             e.preventDefault();
-            const payload = {
-                firstname: document.getElementById('t-firstname').value,
-                lastname: document.getElementById('t-lastname').value,
-                id: document.getElementById('t-id').value,
-                subject: document.getElementById('t-subject').value,
+            const firstName = document.getElementById('t-firstname').value;
+            const lastName = document.getElementById('t-lastname').value;
+            const id = document.getElementById('t-id').value;
+            const subject = document.getElementById('t-subject').value;
+
+            // Save or update teacher
+            const teachers = getFromStorage(STORAGE_KEYS.TEACHERS);
+            const existingIndex = teachers.findIndex(t => t.id === id);
+            
+            const teacherData = {
+                id: id,
+                firstName: firstName,
+                lastName: lastName,
+                subject: subject,
+                isActive: true
             };
 
-            try {
-                const response = await fetch('/api/login/teacher/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
-                const data = await response.json();
-
-                if(data.status === 'success') {
-                    currentTeacher = data.teacher;
-                    document.getElementById('teacher-name').innerText = payload.firstname + ' ' + payload.lastname;
-                    document.getElementById('teacher-subject').innerText = payload.subject;
-                    
-                    // Load initial data
-                    await loadDashboardStats();
-                    showPage('teacher');
-                    
-                    setTimeout(() => {
-                        alert(`✅ ${data.message}`);
-                    }, 500);
-                } else {
-                    alert(`❌ ${data.message}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('❌ Network error. Please try again.');
+            if (existingIndex >= 0) {
+                teachers[existingIndex] = teacherData;
+            } else {
+                teachers.push(teacherData);
             }
+            
+            saveToStorage(STORAGE_KEYS.TEACHERS, teachers);
+            currentTeacher = teacherData;
+
+            document.getElementById('teacher-name').innerText = firstName + ' ' + lastName;
+            document.getElementById('teacher-subject').innerText = subject;
+            
+            // Load initial data
+            loadDashboardStats();
+            showPage('teacher');
+            alert('✅ Teacher registered successfully!');
         }
 
-        async function sendScanToBackend(qrData) {
-            try {
-                const response = await fetch('/api/attendance/mark/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        qr_data: qrData,
-                        teacher_id: currentTeacher ? currentTeacher.id : ''
-                    })
-                });
-                const data = await response.json();
-
-                if (data.status === 'success' || data.status === 'warning') {
-                    const s = data.student;
-                    const tbody = document.getElementById('attendance-list');
-                    const empty = document.getElementById('empty-state');
-                    if(empty) empty.remove();
-                    
-                    const time = s.time_marked || new Date().toLocaleTimeString();
-                    const statusClass = data.status === 'warning' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
-                    const statusText = data.status === 'warning' ? 'Already Present' : 'Present';
-                    
-                    const row = `
-                        <tr class="hover:bg-green-50 transition ${statusClass}">
-                            <td class="px-6 py-4 text-gray-500 font-mono text-sm">${time}</td>
-                            <td class="px-6 py-4 font-medium text-gray-900">
-                                ${s.name} <div class="text-xs text-gray-400">${s.course_level}</div>
-                            </td>
-                            <td class="px-6 py-4"><span class="${statusClass} px-2 py-1 rounded-full text-xs">${statusText}</span></td>
-                        </tr>`;
-                    tbody.innerHTML = row + tbody.innerHTML;
-                    
-                    // Update stats
-                    if (data.status === 'success') {
-                        presentCount++;
-                        document.getElementById('present-count').innerText = presentCount;
-                        await updateAttendanceRate();
-                    }
-                    
-                    alert(data.message);
-                } else {
-                    alert(`❌ ${data.message}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('❌ Network error. Please try again.');
-            }
-        }
-
-        // --- STANDARD UTILS ---
-        function showPage(pageId) {
-            document.querySelectorAll('section').forEach(el => el.classList.add('hidden'));
-            document.getElementById('page-' + pageId).classList.remove('hidden');
-            if(pageId !== 'teacher' && html5QrcodeScanner) {
-                html5QrcodeScanner.clear();
-                document.getElementById('scanner-wrapper').classList.add('hidden');
-            }
-        }
-
+        // ============ QR SCANNING ============
         function toggleScanner() {
             const wrapper = document.getElementById('scanner-wrapper');
             if (wrapper.classList.contains('hidden')) {
                 wrapper.classList.remove('hidden');
-                
-                // Check if camera access is possible
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    // Test camera permission
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                        .then(stream => {
-                            // Stop the test stream
-                            stream.getTracks().forEach(track => track.stop());
-                            
-                            // Check if Html5Qrcode is loaded
-                            if (typeof Html5Qrcode !== 'undefined') {
-                                // Initialize scanner
-                                html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 250, height: 250} }, false);
-                                html5QrcodeScanner.render(onScanSuccess, (err) => {});
-                            } else {
-                                showCameraError('QR scanner library not loaded. Please check your internet connection.');
-                            }
-                        })
-                        .catch(error => {
-                            showCameraError();
-                        });
-                } else {
-                    showCameraError();
-                }
+                html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 250, height: 250} }, false);
+                html5QrcodeScanner.render(onScanSuccess, (err) => {});
             } else {
                 wrapper.classList.add('hidden');
                 if(html5QrcodeScanner) html5QrcodeScanner.clear();
             }
         }
-        
-        function showCameraError(customMessage) {
-            const wrapper = document.getElementById('scanner-wrapper');
-            if (wrapper) wrapper.classList.add('hidden');
-            
-            // Camera not available - do nothing
-        }
 
         function onScanSuccess(decodedText) {
             toggleScanner();
-            sendScanToBackend(decodedText);
+            console.log('QR Code scanned:', decodedText);
+            processQRCode(decodedText);
         }
 
-        // ============ STUDENT MANAGEMENT FUNCTIONS ============
-        async function showStudentsManagement() {
-            showPage('students');
-            await loadStudentsList();
-        }
-
-        async function loadStudentsList() {
-            try {
-                const tbody = document.getElementById('students-table-body');
-                tbody.innerHTML = '<tr id="students-loading"><td colspan="5" class="px-6 py-12 text-center text-gray-400">Loading students...</td></tr>';
-                
-                const response = await fetch('/api/students/');
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    currentStudents = data.students;
-                    renderStudentsTable(data.students);
-                } else {
-                    tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-red-400">Error loading students</td></tr>';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                const tbody = document.getElementById('students-table-body');
-                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-red-400">Network error</td></tr>';
-            }
-        }
-
-        function renderStudentsTable(students) {
-            const tbody = document.getElementById('students-table-body');
-            
-            if (students.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-gray-400">No students found</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = students.map(student => `
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 font-mono text-sm">${student.id}</td>
-                    <td class="px-6 py-4 font-medium">${student.name}</td>
-                    <td class="px-6 py-4 text-gray-600">${student.course} - Year ${student.level}</td>
-                    <td class="px-6 py-4">
-                        <span class="${student.is_present_today ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'} px-2 py-1 rounded-full text-xs">
-                            ${student.is_present_today ? 'Present Today' : 'Absent'}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex space-x-2">
-                            <button onclick="editStudent('${student.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                <i data-lucide="edit" class="w-4 h-4"></i>
-                            </button>
-                            <button onclick="downloadStudentQR('${student.id}')" class="text-green-600 hover:text-green-800 text-sm font-medium">
-                                <i data-lucide="download" class="w-4 h-4"></i>
-                            </button>
-                            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-            
-            lucide.createIcons();
-        }
-
-        function refreshStudentsList() {
-            loadStudentsList();
-        }
-
-        function searchStudents() {
-            const searchTerm = document.getElementById('student-search').value.toLowerCase();
-            const filteredStudents = currentStudents.filter(student => 
-                student.name.toLowerCase().includes(searchTerm) ||
-                student.id.toLowerCase().includes(searchTerm) ||
-                student.course.toLowerCase().includes(searchTerm)
-            );
-            renderStudentsTable(filteredStudents);
-        }
-
-        function editStudent(studentId) {
-            const student = currentStudents.find(s => s.id === studentId);
-            if (!student) return;
-            
-            // Simple prompt-based editing (in a real app, you'd use a modal)
-            const newName = prompt('Enter new name (First Last):', student.name);
-            if (!newName) return;
-            
-            const [firstName, ...lastNameParts] = newName.split(' ');
-            const lastName = lastNameParts.join(' ');
-            
-            const newCourse = prompt('Enter new course:', student.course);
-            if (!newCourse) return;
-            
-            const newLevel = prompt('Enter new level (1-5):', student.level);
-            if (!newLevel) return;
-            
-            updateStudent(studentId, {
-                firstname: firstName,
-                lastname: lastName,
-                course: newCourse,
-                level: newLevel
-            });
-        }
-
-        async function updateStudent(studentId, data) {
-            try {
-                const response = await fetch('/api/students/update/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        student_id: studentId,
-                        ...data
-                    })
-                });
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    alert('✅ Student updated successfully!');
-                    await loadStudentsList();
-                } else {
-                    alert(`❌ ${result.message}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('❌ Network error. Please try again.');
-            }
-        }
-
-        async function deleteStudent(studentId) {
-            if (!confirm('Are you sure you want to deactivate this student?')) return;
-            
-            try {
-                const response = await fetch('/api/students/delete/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        student_id: studentId
-                    })
-                });
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    alert('✅ Student deactivated successfully!');
-                    await loadStudentsList();
-                } else {
-                    alert(`❌ ${result.message}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('❌ Network error. Please try again.');
-            }
-        }
-
-        function downloadStudentQR(studentId) {
-            const student = currentStudents.find(s => s.id === studentId);
-            if (!student) return;
-            
-            const qrData = `STUDENT:${studentId}`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
-            
-            // Create a temporary link to download the QR code
-            const link = document.createElement('a');
-            link.href = qrUrl;
-            link.download = `${student.name.replace(' ', '_')}_QR.png`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // ============ DASHBOARD STATS ============
-        async function loadDashboardStats() {
-            try {
-                const response = await fetch('/api/attendance/daily/');
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    const stats = data.statistics;
-                    presentCount = stats.present;
-                    document.getElementById('present-count').innerText = stats.present;
-                    document.getElementById('total-students').innerText = stats.total_students;
-                    document.getElementById('attendance-rate').innerText = `${stats.attendance_rate}%`;
-                }
-            } catch (error) {
-                console.error('Error loading stats:', error);
-            }
-        }
-
-        async function updateAttendanceRate() {
-            await loadDashboardStats();
-        }
-
-        // ============ QR SCANNING FUNCTIONS ============
-        function handleCameraButtonClick() {
-            // Check if we're on HTTPS or localhost
-            const isSecure = window.location.protocol === 'https:' || 
-                            window.location.hostname === 'localhost' || 
-                            window.location.hostname === '127.0.0.1';
-            
-            if (isSecure) {
-                // Secure connection (including localhost), try camera
-                toggleScanner();
-            }
-            // For non-secure connections, do nothing
-        }
-        
         function openImageUpload() {
-            const fileInput = document.getElementById('qr-image-input');
-            if (!fileInput) {
-                alert('❌ File input not found. Please refresh the page and try again.');
-                return;
-            }
-            
-            // Check if we're in a WebView environment
-            const isWebView = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            // WebView detected - no alert needed
-            
-            // Clear any existing file selection
-            fileInput.value = '';
-            
-            try {
-                // Trigger file picker
-                fileInput.click();
-            } catch (error) {
-                alert('❌ File picker error: ' + error.message + '\n\nPlease try:\n' +
-                      '1. Refreshing the page\n' +
-                      '2. Restarting the app\n' +
-                      '3. Checking app permissions');
-            }
+            document.getElementById('qr-image-input').click();
         }
 
-        async function handleImageUpload(event) {
+        function handleImageUpload(event) {
             const file = event.target.files[0];
-            if (!file) {
-                return;
-            }
+            if (!file) return;
             
             // Validate file type
             if (!file.type.startsWith('image/')) {
@@ -1153,37 +763,29 @@
                 return;
             }
             
-            // QR Image uploaded - processing silently
+            alert('📱 QR Image uploaded! Decoding...');
             
             try {
-                // Create an image element to load the file
                 const img = new Image();
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 
                 img.onload = function() {
                     try {
-                        // Set canvas size to image size
                         canvas.width = img.width;
                         canvas.height = img.height;
-                        
-                        // Draw image on canvas
                         ctx.drawImage(img, 0, 0);
                         
-                        // Get image data
                         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                         
-                        // Decode QR code with better options
                         const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                            inversionAttempts: "dontInvert", // Optional: performance optimization
+                            inversionAttempts: "dontInvert",
                         });
                         
                         if (code) {
-                            // QR code found!
-                            // Send the decoded QR data to the upload API
-                            sendDecodedQrToBackend(code.data);
+                            console.log('QR Code decoded from image:', code.data);
+                            processQRCode(code.data);
                         } else {
-                            // No QR code found, show error with suggestions
                             alert('❌ No QR code found in the image. Please ensure:\n' +
                                   '• The image is clear and well-lit\n' +
                                   '• The QR code is not blurry or distorted\n' +
@@ -1196,19 +798,17 @@
                     }
                 };
                 
-                img.onerror = function(error) {
+                img.onerror = function() {
                     alert('❌ Error loading image. Please try a different image.');
                 };
                 
-                // Load the image file
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     img.src = e.target.result;
                 };
-                reader.onerror = function(error) {
+                reader.onerror = function() {
                     alert('❌ Error reading file. Please try again.');
                 };
-                
                 reader.readAsDataURL(file);
                 
             } catch (error) {
@@ -1216,73 +816,267 @@
                 alert('❌ Error processing image. Please try again.');
             }
             
-            // Clear the input
             event.target.value = '';
         }
-        
-        function sendDecodedQrToBackend(qrData) {
-            const payload = { 
-                qr_data: qrData,
-                teacher_id: currentTeacher ? currentTeacher.id : ''
+
+        function processQRCode(qrData) {
+            // Extract student ID from QR data
+            const studentId = extractStudentIdFromQR(qrData);
+            
+            if (!studentId) {
+                alert('❌ Invalid QR code format. Expected STUDENT:ID format.');
+                return;
+            }
+            
+            // Find student
+            const students = getFromStorage(STORAGE_KEYS.STUDENTS);
+            const student = students.find(s => s.id === studentId && s.isActive);
+            
+            if (!student) {
+                alert(`❌ Student ID ${studentId} not found.`);
+                return;
+            }
+            
+            // Mark attendance
+            markAttendance(student);
+        }
+
+        function extractStudentIdFromQR(qrData) {
+            if (!qrData) return null;
+            
+            // Try to extract from "STUDENT:ID" format
+            if (qrData.startsWith('STUDENT:')) {
+                return qrData.split('STUDENT:')[1];
+            }
+            
+            // Try to extract numeric ID directly
+            const numericMatch = qrData.match(/\d+/);
+            if (numericMatch) {
+                return numericMatch.group();
+            }
+            
+            return null;
+        }
+
+        function markAttendance(student) {
+            const attendanceLogs = getFromStorage(STORAGE_KEYS.ATTENDANCE);
+            const today = new Date().toDateString();
+            
+            // Check if already marked today
+            const existingLog = attendanceLogs.find(log => 
+                log.studentId === student.id && 
+                new Date(log.date).toDateString() === today
+            );
+            
+            if (existingLog) {
+                alert(`⚠️ ${student.firstName} ${student.lastName} is already marked present today.`);
+                return;
+            }
+            
+            // Create attendance log
+            const logEntry = {
+                id: Date.now().toString(),
+                studentId: student.id,
+                studentName: `${student.firstName} ${student.lastName}`,
+                courseLevel: `${student.course} - Year ${student.level}`,
+                date: new Date().toISOString(),
+                time: new Date().toLocaleTimeString(),
+                teacherId: currentTeacher ? currentTeacher.id : '',
+                teacherName: currentTeacher ? `${currentTeacher.firstName} ${currentTeacher.lastName}` : '',
+                method: 'QR_SCAN'
             };
             
-            try {
-                fetch('/api/attendance/upload/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(response => {
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.status === 'success' || data.status === 'warning') {
-                        const s = data.student;
-                        const tbody = document.getElementById('attendance-list');
-                        const empty = document.getElementById('empty-state');
-                        if(empty) empty.remove();
-                        
-                        const time = s.time_marked || new Date().toLocaleTimeString();
-                        const statusClass = data.status === 'warning' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
-                        const statusText = data.status === 'warning' ? 'Already Present' : 'Present';
-                        
-                        const row = `
-                            <tr class="hover:bg-green-50 transition ${statusClass}">
-                                <td class="px-6 py-4 text-gray-500 font-mono text-sm">${time}</td>
-                                <td class="px-6 py-4 font-medium text-gray-900">
-                                    ${s.name} <div class="text-xs text-gray-400">${s.course_level}</div>
-                                </td>
-                                <td class="px-6 py-4"><span class="${statusClass} px-2 py-1 rounded-full text-xs">${statusText}</span></td>
-                            </tr>`;
-                        tbody.innerHTML = row + tbody.innerHTML;
-                        
-                        // Update stats
-                        if (data.status === 'success') {
-                            presentCount++;
-                            document.getElementById('present-count').innerText = presentCount;
-                            updateAttendanceRate();
-                        }
-                        
-                        alert(data.message);
-                    } else {
-                        alert(`❌ ${data.message}`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    alert('❌ Network error. Please try again.');
-                });
-            } catch (error) {
-                console.error('General error:', error);
-                alert('❌ Network error. Please try again.');
+            attendanceLogs.unshift(logEntry);
+            saveToStorage(STORAGE_KEYS.ATTENDANCE, attendanceLogs);
+            
+            // Update UI
+            addAttendanceToTable(logEntry);
+            presentCount++;
+            document.getElementById('present-count').innerText = presentCount;
+            updateAttendanceRate();
+            
+            alert(`✅ ${student.firstName} ${student.lastName} marked present!`);
+        }
+
+        function addAttendanceToTable(logEntry) {
+            const tbody = document.getElementById('attendance-list');
+            const empty = document.getElementById('empty-state');
+            if (empty) empty.remove();
+            
+            const row = `
+                <tr class="hover:bg-green-50 transition bg-green-100 text-green-800">
+                    <td class="px-6 py-4 text-gray-500 font-mono text-sm">${logEntry.time}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">
+                        ${logEntry.studentName} <div class="text-xs text-gray-400">${logEntry.courseLevel}</div>
+                    </td>
+                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Present</span></td>
+                </tr>`;
+            tbody.innerHTML = row + tbody.innerHTML;
+        }
+
+        // ============ STUDENT MANAGEMENT ============
+        function showStudentsManagement() {
+            showPage('students');
+            loadStudentsList();
+        }
+
+        function loadStudentsList() {
+            currentStudents = getFromStorage(STORAGE_KEYS.STUDENTS).filter(s => s.isActive);
+            renderStudentsTable(currentStudents);
+        }
+
+        function renderStudentsTable(students) {
+            const tbody = document.getElementById('students-table-body');
+            
+            if (students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-gray-400">No students found</td></tr>';
+                return;
+            }
+            
+            // Get today's attendance to check status
+            const attendanceLogs = getFromStorage(STORAGE_KEYS.ATTENDANCE);
+            const today = new Date().toDateString();
+            
+            tbody.innerHTML = students.map(student => {
+                const isPresentToday = attendanceLogs.some(log => 
+                    log.studentId === student.id && 
+                    new Date(log.date).toDateString() === today
+                );
+                
+                return `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 font-mono text-sm">${student.id}</td>
+                    <td class="px-6 py-4 font-medium">${student.firstName} ${student.lastName}</td>
+                    <td class="px-6 py-4 text-gray-600">${student.course} - Year ${student.level}</td>
+                    <td class="px-6 py-4">
+                        <span class="${isPresentToday ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'} px-2 py-1 rounded-full text-xs">
+                            ${isPresentToday ? 'Present Today' : 'Absent'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            <button onclick="editStudent('${student.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="downloadStudentQR('${student.id}')" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+
+        function refreshStudentsList() {
+            loadStudentsList();
+        }
+
+        function searchStudents() {
+            const searchTerm = document.getElementById('student-search').value.toLowerCase();
+            const filteredStudents = currentStudents.filter(student => 
+                `${student.firstName} ${student.lastName}`.toLowerCase().includes(searchTerm) ||
+                student.id.toLowerCase().includes(searchTerm) ||
+                student.course.toLowerCase().includes(searchTerm)
+            );
+            renderStudentsTable(filteredStudents);
+        }
+
+        function editStudent(studentId) {
+            const students = getFromStorage(STORAGE_KEYS.STUDENTS);
+            const student = students.find(s => s.id === studentId);
+            if (!student) return;
+            
+            const newName = prompt('Enter new name (First Last):', `${student.firstName} ${student.lastName}`);
+            if (!newName) return;
+            
+            const [firstName, ...lastNameParts] = newName.split(' ');
+            const lastName = lastNameParts.join(' ');
+            
+            const newCourse = prompt('Enter new course:', student.course);
+            if (!newCourse) return;
+            
+            const newLevel = prompt('Enter new level (1-5):', student.level);
+            if (!newLevel) return;
+            
+            student.firstName = firstName;
+            student.lastName = lastName;
+            student.course = newCourse;
+            student.level = newLevel;
+            
+            saveToStorage(STORAGE_KEYS.STUDENTS, students);
+            loadStudentsList();
+            alert('✅ Student updated successfully!');
+        }
+
+        function deleteStudent(studentId) {
+            if (!confirm('Are you sure you want to deactivate this student?')) return;
+            
+            const students = getFromStorage(STORAGE_KEYS.STUDENTS);
+            const studentIndex = students.findIndex(s => s.id === studentId);
+            
+            if (studentIndex >= 0) {
+                students[studentIndex].isActive = false;
+                saveToStorage(STORAGE_KEYS.STUDENTS, students);
+                loadStudentsList();
+                alert('✅ Student deactivated successfully!');
             }
         }
 
-        // Update the initialization to include search functionality
+        function downloadStudentQR(studentId) {
+            const students = getFromStorage(STORAGE_KEYS.STUDENTS);
+            const student = students.find(s => s.id === studentId);
+            if (!student) return;
+            
+            const qrData = `STUDENT:${studentId}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
+            
+            const link = document.createElement('a');
+            link.href = qrUrl;
+            link.download = `${student.firstName}_${student.lastName}_QR.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // ============ DASHBOARD STATS ============
+        function loadDashboardStats() {
+            const students = getFromStorage(STORAGE_KEYS.STUDENTS).filter(s => s.isActive);
+            const attendanceLogs = getFromStorage(STORAGE_KEYS.ATTENDANCE);
+            const today = new Date().toDateString();
+            
+            const totalStudents = students.length;
+            const presentToday = attendanceLogs.filter(log => 
+                new Date(log.date).toDateString() === today
+            ).length;
+            
+            presentCount = presentToday;
+            document.getElementById('present-count').innerText = presentToday;
+            document.getElementById('total-students').innerText = totalStudents;
+            
+            const attendanceRate = totalStudents > 0 ? Math.round((presentToday / totalStudents) * 100) : 0;
+            document.getElementById('attendance-rate').innerText = `${attendanceRate}%`;
+        }
+
+        // ============ UTILITY FUNCTIONS ============
+        function showPage(pageId) {
+            document.querySelectorAll('section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('page-' + pageId).classList.remove('hidden');
+            if(pageId !== 'teacher' && html5QrcodeScanner) {
+                html5QrcodeScanner.clear();
+                document.getElementById('scanner-wrapper').classList.add('hidden');
+            }
+        }
+
+        // ============ INITIALIZATION ============
         window.addEventListener('load', () => {
             initDarkMode();
+            initializeData();
+            
             document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
             document.getElementById('student-search').addEventListener('input', searchStudents);
         });
